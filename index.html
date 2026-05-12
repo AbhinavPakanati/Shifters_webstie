@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shifters — Design Thinking</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #e8ff47;
+    --accent2: #ff6b47;
+    --accent3: #47c8ff;
+    --text: #f0f0f5;
+    --muted: #888899;
+    --card: #16161f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(232,255,71,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    left: -5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(71,200,255,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 2rem;
+    max-width: 900px;
+  }
+  .hero-title span { color: var(--accent); }
+  .hero-title .line2 { color: var(--muted); }
+  .hero-desc {
+    max-width: 600px;
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: 3rem;
+    line-height: 1.8;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .hero-meta-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .hero-meta-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text);
+  }
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  .hero-scroll::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* SECTION COMMON */
+  section {
+    padding: 6rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .section-body {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    max-width: 800px;
+  }
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* MISSION */
+  .mission-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+    align-items: start;
+  }
+  .mission-statement {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .mission-statement::before {
+    content: '"';
+    position: absolute;
+    top: -0.5rem;
+    left: 1.5rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 8rem;
+    color: var(--accent);
+    opacity: 0.15;
+    line-height: 1;
+  }
+  .mission-statement p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text);
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+  }
+  .mission-statement .hmw {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.95rem;
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 500;
+  }
+  .opportunity-areas {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .opp-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .opp-card:hover {
+    border-color: var(--accent);
+    transform: translateX(6px);
+  }
+  .opp-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .opp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* TEAM */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .team-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .team-card:hover {
+    border-color: var(--accent3);
+    transform: translateY(-4px);
+  }
+  .team-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--bg);
+    margin: 0 auto 1rem;
+  }
+  .team-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .team-role {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* PROBLEM CANVAS */
+  .canvas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .canvas-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: border-color 0.2s;
+  }
+  .canvas-card:hover { border-color: var(--accent2); }
+  .canvas-card.wide { grid-column: span 2; }
+  .canvas-card.full { grid-column: span 3; }
+  .canvas-card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .canvas-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent2);
+    margin-bottom: 1rem;
+  }
+  .canvas-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .canvas-card ul li {
+    font-size: 0.9rem;
+    color: var(--muted);
+    padding-left: 1rem;
+    position: relative;
+  }
+  .canvas-card ul li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+    opacity: 0.6;
+  }
+  .pov-box {
+    background: linear-gradient(135deg, rgba(232,255,71,0.05), rgba(71,200,255,0.05));
+    border: 1px solid rgba(232,255,71,0.2);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+  .pov-box em { color: var(--accent); font-style: normal; font-weight: 500; }
+
+  /* RESEARCH */
+  .research-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .stat-card:hover { border-color: var(--accent3); transform: translateY(-3px); }
+  .stat-card .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: var(--accent3);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .stat-card .stat-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .insight-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .insight-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent3);
+    border-radius: 0 12px 12px 0;
+    padding: 1.25rem 1.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--muted);
+    transition: border-left-color 0.2s;
+  }
+  .insight-item:hover { border-left-color: var(--accent); color: var(--text); }
+
+  /* JOURNEY MAP */
+  .journey-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 6rem 0;
+  }
+  .journey-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+  .journey-stages {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .journey-stage {
+    padding: 2rem 1.5rem;
+    border-right: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .journey-stage:last-child { border-right: none; }
+  .journey-stage:hover { background: var(--surface2); }
+  .stage-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .stage-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    line-height: 1.3;
+  }
+  .stage-row {
+    margin-bottom: 1rem;
+  }
+  .stage-row-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+  .stage-row-content {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .emotion-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .emo-pos { background: rgba(71,200,255,0.15); color: var(--accent3); }
+  .emo-neu { background: rgba(255,255,255,0.08); color: var(--muted); }
+  .emo-neg { background: rgba(255,107,71,0.15); color: var(--accent2); }
+  .emo-very-neg { background: rgba(255,50,50,0.2); color: #ff5555; }
+  .emo-rec { background: rgba(232,255,71,0.12); color: var(--accent); }
+
+  .emotion-graph {
+    margin-top: 2.5rem;
+    padding: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+  .emotion-graph h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .graph-svg-wrap { overflow-x: auto; }
+
+  /* INTERVIEWS */
+  .interviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .interview-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .interview-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+  .interview-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .interview-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .interview-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .interview-by {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .interview-quote {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-style: italic;
+    flex: 1;
+  }
+  .interview-quote::before { content: '"'; color: var(--accent); }
+  .interview-quote::after { content: '"'; color: var(--accent); }
+  .interview-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .interview-tags .tag {
+    background: rgba(232,255,71,0.08);
+    border-color: rgba(232,255,71,0.2);
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+
+  /* HMW */
+  .hmw-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 6rem 0;
+  }
+  .hmw-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+  .hmw-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+  .hmw-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.5;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    cursor: default;
+  }
+  .hmw-card:hover {
+    border-color: var(--accent);
+    background: rgba(232,255,71,0.04);
+    color: var(--text);
+  }
+  .hmw-card .hmw-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: rgba(232,255,71,0.15);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  /* IDEATION */
+  .ideation-layout {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+  }
+  .ideation-intro {
+    position: sticky;
+    top: 7rem;
+    height: fit-content;
+  }
+  .ideation-intro p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .method-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .ideas-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .idea-group {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .idea-group:hover { border-color: var(--accent2); }
+  .idea-group-header {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .idea-group-header h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .idea-group-header span {
+    font-size: 1.2rem;
+    color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+  .idea-group.open .idea-group-header span { transform: rotate(45deg); }
+  .idea-group-body {
+    display: none;
+    padding: 0 1.5rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .idea-group.open .idea-group-body { display: block; }
+  .idea-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+  .idea-item {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .idea-item::before {
+    content: '→';
+    color: var(--accent2);
+    flex-shrink: 0;
+    margin-top: 0.05rem;
+  }
+
+  /* AI INSIGHTS */
+  .ai-insight-box {
+    background: linear-gradient(135deg, rgba(255,107,71,0.06), rgba(71,200,255,0.06));
+    border: 1px solid rgba(255,107,71,0.25);
+    border-radius: 20px;
+    padding: 3rem;
+    margin-top: 3rem;
+  }
+  .ai-insight-box h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--accent2);
+    margin-bottom: 1.25rem;
+  }
+  .ai-insight-box p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.9;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: var(--accent);
+  }
+  .footer-text {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-align: right;
+  }
+  .footer-text strong { color: var(--text); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up {
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.2s; }
+  .fade-up:nth-child(3) { animation-delay: 0.3s; }
+  .fade-up:nth-child(4) { animation-delay: 0.4s; }
+  .fade-up:nth-child(5) { animation-delay: 0.5s; }
+  .fade-up:nth-child(6) { animation-delay: 0.6s; }
+  .fade-up:nth-child(7) { animation-delay: 0.7s; }
+  .fade-up:nth-child(8) { animation-delay: 0.8s; }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* scrolled active nav */
+  .nav-links a.active { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#home">SHIFTERS</a>
+  <ul class="nav-links">
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#interviews">Interviews</a></li>
+    <li><a href="#hmw">HMW</a></li>
+    <li><a href="#ideation">Ideation</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="home" style="position:relative; overflow:hidden; border-bottom: 1px solid var(--border);">
+  <section class="hero">
+    <p class="hero-eyebrow fade-up">Design Thinking — Mahindra University · 2026</p>
+    <h1 class="hero-title fade-up">
+      Fighting<br>
+      <span>Fake News</span><br>
+      <span class="line2">by Design.</span>
+    </h1>
+    <p class="hero-desc fade-up">
+      College students and social media users struggle to identify trustworthy online information. 
+      We used design thinking to understand why — and to imagine what a better, more informed digital world could look like.
+    </p>
+    <div class="hero-meta fade-up">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Team</span>
+        <span class="hero-meta-value">Shifters</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Members</span>
+        <span class="hero-meta-value">8 People</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Research</span>
+        <span class="hero-meta-value">40+ Participants</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">HMW Questions</span>
+        <span class="hero-meta-value">24 Generated</span>
+      </div>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+</div>
+
+<!-- MISSION -->
+<section id="mission">
+  <p class="section-label">Our Mission</p>
+  <h2 class="section-title">Why This Matters</h2>
+  <p class="section-body">
+    Social media has become the primary source of news for millions of young adults — 
+    yet it's also the biggest breeding ground for misinformation. We set out to understand 
+    the human experience behind fake news: the confusion, the emotion, the habits that make 
+    misinformation spread.
+  </p>
+  <div class="mission-grid">
+    <div>
+      <div class="mission-statement">
+        <p>
+          A social media user who relies on online platforms for news needs to have a fast, 
+          simple, and trustworthy way to verify information before sharing it — because they 
+          want to stay informed quickly without accidentally spreading misinformation or 
+          damaging their credibility.
+        </p>
+        <p class="hmw">How might we help users quickly evaluate the credibility of online information so that misinformation sharing decreases and responsible digital consumption becomes a natural habit?</p>
+      </div>
+    </div>
+    <div class="opportunity-areas">
+      <div class="opp-card">
+        <h4>🔍 Verification & Detection</h4>
+        <div class="opp-tags">
+          <span class="tag">AI credibility scoring</span>
+          <span class="tag">Deepfake detection</span>
+          <span class="tag">AI-written text detection</span>
+          <span class="tag">Manipulated audio analysis</span>
+        </div>
+      </div>
+      <div class="opp-card">
+        <h4>🔗 Context & Transparency</h4>
+        <div class="opp-tags">
+          <span class="tag">Source lineage tracking</span>
+          <span class="tag">Context cards</span>
+          <span class="tag">Expert consensus indicators</span>
+          <span class="tag">Side-by-side source comparison</span>
+        </div>
+      </div>
+      <div class="opp-card">
+        <h4>🎯 Behavior & Habit Building</h4>
+        <div class="opp-tags">
+          <span class="tag">Pause-before-sharing prompts</span>
+          <span class="tag">Verification rewards</span>
+          <span class="tag">Gamified fact-checking</span>
+          <span class="tag">Educational nudges</span>
+        </div>
+      </div>
+      <div class="opp-card">
+        <h4>🧠 Emotional & Cognitive Support</h4>
+        <div class="opp-tags">
+          <span class="tag">Emotional headline detection</span>
+          <span class="tag">Information overload reduction</span>
+          <span class="tag">Balanced news summaries</span>
+          <span class="tag">Healthy skepticism training</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TEAM -->
+<section id="team">
+  <p class="section-label">The People</p>
+  <h2 class="section-title">Team Shifters</h2>
+  <p class="section-body">
+    Nine students from Mahindra University, united by a shared conviction that 
+    information integrity is a design problem — and design thinking is how we solve it.
+  </p>
+  <div class="team-grid">
+    <div class="team-card fade-up">
+      <div class="team-avatar" style="background: linear-gradient(135deg,#e8ff47,#47c8ff);">A</div>
+      <div class="team-name">Abhinav</div>
+      <div class="team-role">Lead Researcher</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar" style="background: linear-gradient(135deg,#ff6b47,#e8ff47);">R</div>
+      <div class="team-name">Ritvik</div>
+      <div class="team-role">Interviewer</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar" style="background: linear-gradient(135deg,#47c8ff,#ff6b47);">J</div>
+      <div class="team-name">John</div>
+      <div class="team-role">Ideation Lead</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar" style="background: linear-gradient(135deg,#e8ff47,#ff6b47);">H</div>
+      <div class="team-name">Hasini</div>
+      <div class="team-role">Interviewer</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar" style="background: linear-gradient(135deg,#ff6b47,#47c8ff);">S</div>
+      <div class="team-name">Supradeep</div>
+      <div class="team-role">Data Analyst</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar" style="background: linear-gradient(135deg,#47c8ff,#e8ff47);">N</div>
+      <div class="team-name">Navaneeth</div>
+      <div class="team-role">Interviewer</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar" style="background: linear-gradient(135deg,#e8ff47,#ff6b47);">An</div>
+      <div class="team-name">Anvit</div>
+      <div class="team-role">Interviewer</div>
+    </div>
+    <div class="team-card fade-up">
+      <div class="team-avatar" style="background: linear-gradient(135deg,#ff6b47,#e8ff47);">Av</div>
+      <div class="team-name">Avanika</div>
+      <div class="team-role">Solution Framing</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEM CANVAS -->
+<section id="problem">
+  <p class="section-label">Define Phase</p>
+  <h2 class="section-title">Problem Statement Canvas</h2>
+  <p class="section-body">
+    Using the integrated design thinking framework, we mapped our user, their context, 
+    pain points, root causes, and the scale of impact to arrive at a clear, actionable problem definition.
+  </p>
+  <div class="canvas-grid">
+    <div class="canvas-card">
+      <div class="canvas-card-icon">👤</div>
+      <h3>User / Protagonist</h3>
+      <ul>
+        <li>Young adults aged 18–25</li>
+        <li>Heavy social media users</li>
+        <li>Platforms: Instagram, X/Twitter, TikTok, WhatsApp, YouTube</li>
+        <li>Consume news quickly, struggle to verify before sharing</li>
+      </ul>
+    </div>
+    <div class="canvas-card">
+      <div class="canvas-card-icon">🌐</div>
+      <h3>Context & Situation</h3>
+      <ul>
+        <li>Viral or trending posts</li>
+        <li>Breaking news events</li>
+        <li>Emotionally charged headlines</li>
+        <li>AI-generated videos, images, text</li>
+        <li>Peer pressure to stay updated</li>
+        <li>Fast-paced digital environment</li>
+      </ul>
+    </div>
+    <div class="canvas-card">
+      <div class="canvas-card-icon">📋</div>
+      <h3>Evidence Base</h3>
+      <ul>
+        <li>Users trust viral posts due to share count</li>
+        <li>Most do not verify before reposting</li>
+        <li>Fact-checking seen as time-consuming</li>
+        <li>AI-generated content harder to detect</li>
+        <li>Empathy mapping &amp; user journey research</li>
+      </ul>
+    </div>
+    <div class="canvas-card">
+      <div class="canvas-card-icon">⚡</div>
+      <h3>Pain Points & Needs</h3>
+      <ul>
+        <li>Difficulty identifying trustworthy information</li>
+        <li>Lack of quick verification tools</li>
+        <li>AI-generated media increasingly realistic</li>
+        <li>Information overload from multiple platforms</li>
+        <li>Fear of sharing fake information publicly</li>
+      </ul>
+    </div>
+    <div class="canvas-card">
+      <div class="canvas-card-icon">🔎</div>
+      <h3>Root Causes (5 Whys)</h3>
+      <ul>
+        <li>Social media prioritizes engagement over accuracy</li>
+        <li>Users consume information too quickly</li>
+        <li>Fact-checking tools are disconnected from browsing</li>
+        <li>Emotional headlines encourage impulsive reactions</li>
+        <li>Social pressure encourages rapid reposting</li>
+      </ul>
+    </div>
+    <div class="canvas-card">
+      <div class="canvas-card-icon">📊</div>
+      <h3>Impact & Scale</h3>
+      <ul>
+        <li>Rapid spread of misinformation</li>
+        <li>Public confusion and panic</li>
+        <li>Manipulation of opinions</li>
+        <li>Loss of trust in news</li>
+        <li>Damage to personal credibility</li>
+        <li>Increased polarization and distrust</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pov-box">
+    <strong>Point of View Statement:</strong><br>
+    A <em>social media user who relies on online platforms for news</em> needs to 
+    <em>have a fast, simple, and trustworthy way to verify information before sharing it</em> because 
+    <em>they want to stay informed quickly without accidentally spreading misinformation or damaging their credibility.</em>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- RESEARCH -->
+<section id="research">
+  <p class="section-label">Empathy Phase</p>
+  <h2 class="section-title">Research & Survey Insights</h2>
+  <p class="section-body">
+    We surveyed 40 participants and conducted in-depth interviews to understand real user 
+    experiences with fake news — the confusion, the emotional impact, and the behavioral patterns.
+  </p>
+  <div class="research-layout">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">40+</div>
+        <div class="stat-label">Survey Participants</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">~90%</div>
+        <div class="stat-label">Encounter news on social media very often</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">~75%</div>
+        <div class="stat-label">Low confidence in identifying fake news</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">~80%</div>
+        <div class="stat-label">Have believed fake news at some point</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">~70%</div>
+        <div class="stat-label">Do not verify before sharing</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">~95%</div>
+        <div class="stat-label">Agree fake news has serious societal impact</div>
+      </div>
+    </div>
+    <div class="insight-list">
+      <div class="insight-item">
+        Social media is now the dominant source of news for young adults — overtaking TV, newspapers, and official channels entirely.
+      </div>
+      <div class="insight-item">
+        Users frequently feel confused about whether news is real or fake, especially when content is emotionally charged or widely shared.
+      </div>
+      <div class="insight-item">
+        Most people rely on comments or peer validation to judge credibility — not independent fact-checking tools.
+      </div>
+      <div class="insight-item">
+        When participants realized they'd shared fake news, they reported feeling angry, embarrassed, and manipulated.
+      </div>
+      <div class="insight-item">
+        AI-generated content is making identification dramatically harder — users know it exists but lack tools to detect it.
+      </div>
+      <div class="insight-item">
+        The lack of integrated, in-platform verification tools means verification happens after sharing, not before.
+      </div>
+    </div>
+  </div>
+  <div class="ai-insight-box">
+    <h3>🤖 The AI Amplification Problem</h3>
+    <p>
+      AI plays a significant role in worsening fake news. Since most people already lack confidence identifying misinformation, 
+      AI-generated content makes this worse by producing highly realistic articles, images, and videos indistinguishable from 
+      genuine information. AI also enables rapid, large-scale distribution through automated bots — and can manipulate social 
+      engagement through fake accounts, making false information appear credible. The result: greater confusion, stronger 
+      emotional impact, and a more profound influence on opinions and decision-making.
+    </p>
+  </div>
+</section>
+
+<!-- JOURNEY MAP -->
+<div class="journey-section" id="journey">
+  <div class="journey-inner">
+    <p class="section-label">Experience Mapping</p>
+    <h2 class="section-title">User Journey Map</h2>
+    <p class="section-body">
+      Mapping the emotional and behavioral journey of a social media user from scrolling 
+      their feed to long-term behavior change — revealing where friction, confusion, and opportunity live.
+    </p>
+    <p style="font-size:0.8rem; color:var(--muted); margin-top:0.5rem;">Persona: People relying on social media for news &nbsp;·&nbsp; Goal: Stay informed without spreading fake news</p>
+
+    <div class="journey-stages">
+      <div class="journey-stage">
+        <div class="stage-num">Stage 01</div>
+        <div class="stage-name">Scrolling Social Media</div>
+        <div class="stage-row">
+          <div class="stage-row-label">Actions</div>
+          <div class="stage-row-content">Scrolls through posts, reads headlines quickly</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Thoughts</div>
+          <div class="stage-row-content">"This is trending, must be important." "Everyone is talking about this."</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Feels</div>
+          <div class="stage-row-content"><span class="emotion-badge emo-pos">Curious</span></div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Pain Points</div>
+          <div class="stage-row-content">Too much information. Hard to judge credibility instantly.</div>
+        </div>
+      </div>
+      <div class="journey-stage">
+        <div class="stage-num">Stage 02</div>
+        <div class="stage-name">Encountering a News Post</div>
+        <div class="stage-row">
+          <div class="stage-row-label">Actions</div>
+          <div class="stage-row-content">Reads headline, skims content. Checks likes/shares instead of source.</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Thoughts</div>
+          <div class="stage-row-content">"No way this is real… or is it?" "It has so many shares, probably true."</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Feels</div>
+          <div class="stage-row-content"><span class="emotion-badge emo-neu">Confused</span></div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Pain Points</div>
+          <div class="stage-row-content">No quick verification tool. Misleading headlines.</div>
+        </div>
+      </div>
+      <div class="journey-stage">
+        <div class="stage-num">Stage 03</div>
+        <div class="stage-name">Deciding to Share</div>
+        <div class="stage-row">
+          <div class="stage-row-label">Actions</div>
+          <div class="stage-row-content">Shares without verifying or hesitates before sharing.</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Thoughts</div>
+          <div class="stage-row-content">"What if this is fake and I look stupid?" "I don't have time to check."</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Feels</div>
+          <div class="stage-row-content"><span class="emotion-badge emo-neg">Anxious</span></div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Pain Points</div>
+          <div class="stage-row-content">Lack of easy fact-checking. Social pressure to share quickly.</div>
+        </div>
+      </div>
+      <div class="journey-stage">
+        <div class="stage-num">Stage 04</div>
+        <div class="stage-name">After Sharing / Reflection</div>
+        <div class="stage-row">
+          <div class="stage-row-label">Actions</div>
+          <div class="stage-row-content">Later realizes the news was false.</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Thoughts</div>
+          <div class="stage-row-content">"I should have checked before sharing."</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Feels</div>
+          <div class="stage-row-content"><span class="emotion-badge emo-very-neg">Regret & Shame</span></div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Pain Points</div>
+          <div class="stage-row-content">No accountability system. Hard to track or retract misinformation.</div>
+        </div>
+      </div>
+      <div class="journey-stage">
+        <div class="stage-num">Stage 05</div>
+        <div class="stage-name">Learning & Behavior Change</div>
+        <div class="stage-row">
+          <div class="stage-row-label">Actions</div>
+          <div class="stage-row-content">Becomes more cautious after past experience.</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Thoughts</div>
+          <div class="stage-row-content">"There must be an easier way to check this."</div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Feels</div>
+          <div class="stage-row-content"><span class="emotion-badge emo-rec">Cautiously aware</span></div>
+        </div>
+        <div class="stage-row">
+          <div class="stage-row-label">Pain Points</div>
+          <div class="stage-row-content">Fact-checking still time-consuming. No habit-forming system. Still tempted by convenience.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="emotion-graph">
+      <h4>Emotion Arc (Score: −10 to +10)</h4>
+      <div class="graph-svg-wrap">
+        <svg width="900" height="120" viewBox="0 0 900 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#47c8ff"/>
+              <stop offset="50%" stop-color="#ff5555"/>
+              <stop offset="100%" stop-color="#e8ff47"/>
+            </linearGradient>
+          </defs>
+          <!-- Zero line -->
+          <line x1="20" y1="60" x2="880" y2="60" stroke="#2a2a3a" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="880" y="64" font-size="10" fill="#888899" text-anchor="end">0</text>
+
+          <!-- Emotion curve: Stage scores: 2, 0, -3, -5, 1 -->
+          <!-- Map: score 2 → y=(60 - 2*6)=48; 0→60; -3→(60+18)=78; -5→(60+30)=90; 1→54 -->
+          <polyline
+            points="90,48 270,60 450,78 630,90 810,54"
+            fill="none"
+            stroke="url(#lineGrad)"
+            stroke-width="2.5"
+            stroke-linejoin="round"
+          />
+          <!-- Dots -->
+          <circle cx="90" cy="48" r="5" fill="#47c8ff" stroke="#0a0a0f" stroke-width="2"/>
+          <circle cx="270" cy="60" r="5" fill="#888899" stroke="#0a0a0f" stroke-width="2"/>
+          <circle cx="450" cy="78" r="5" fill="#ff6b47" stroke="#0a0a0f" stroke-width="2"/>
+          <circle cx="630" cy="90" r="5" fill="#ff5555" stroke="#0a0a0f" stroke-width="2"/>
+          <circle cx="810" cy="54" r="5" fill="#e8ff47" stroke="#0a0a0f" stroke-width="2"/>
+          <!-- Labels -->
+          <text x="90" y="38" font-size="11" fill="#47c8ff" text-anchor="middle">+2</text>
+          <text x="270" y="50" font-size="11" fill="#888899" text-anchor="middle">0</text>
+          <text x="450" y="96" font-size="11" fill="#ff6b47" text-anchor="middle">−3</text>
+          <text x="630" y="108" font-size="11" fill="#ff5555" text-anchor="middle">−5</text>
+          <text x="810" y="44" font-size="11" fill="#e8ff47" text-anchor="middle">+1</text>
+          <!-- Stage labels -->
+          <text x="90" y="118" font-size="9" fill="#555566" text-anchor="middle">Scroll</text>
+          <text x="270" y="118" font-size="9" fill="#555566" text-anchor="middle">Encounter</text>
+          <text x="450" y="118" font-size="9" fill="#555566" text-anchor="middle">Share</text>
+          <text x="630" y="118" font-size="9" fill="#555566" text-anchor="middle">Reflect</text>
+          <text x="810" y="118" font-size="9" fill="#555566" text-anchor="middle">Learn</text>
+        </svg>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem; background:var(--card); border:1px solid var(--border); border-radius:16px; padding:2rem;">
+      <h4 style="font-family:'Syne',sans-serif; font-weight:600; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent3); margin-bottom:1.25rem;">Opportunities at Each Pain Point</h4>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <div style="font-size:0.88rem; color:var(--muted);">📍 <strong style="color:var(--text)">Stage 1:</strong> Add a quick credibility indicator to reduce information overload.</div>
+        <div style="font-size:0.88rem; color:var(--muted);">📍 <strong style="color:var(--text)">Stage 2:</strong> Provide a one-click fact-check with source reliability rating.</div>
+        <div style="font-size:0.88rem; color:var(--muted);">📍 <strong style="color:var(--text)">Stage 3:</strong> Show a warning prompt before sharing unverified content.</div>
+        <div style="font-size:0.88rem; color:var(--muted);">📍 <strong style="color:var(--text)">Stage 4:</strong> Notify users and allow easy correction of misinformation shared.</div>
+        <div style="font-size:0.88sm; color:var(--muted);">📍 <strong style="color:var(--text)">Stage 5:</strong> Encourage habit-building through rewards and verification tools.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERVIEWS -->
+<section id="interviews">
+  <p class="section-label">Field Research</p>
+  <h2 class="section-title">Interview Highlights</h2>
+  <p class="section-body">
+    We conducted face-to-face and recorded interviews with participants across campus, 
+    probing their real experiences with misinformation. Here are key voices from our research.
+  </p>
+
+  <div style="margin-top:2rem; background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:1.5rem 2rem;">
+    <p style="font-size:0.85rem; color:var(--muted); font-weight:500; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:0.75rem;">Interview Questions</p>
+    <div style="display:flex; flex-wrap:wrap; gap:0.6rem;">
+      <span class="tag">How often do you come across news on social media?</span>
+      <span class="tag">Have you felt confused about real vs fake news?</span>
+      <span class="tag">How confident are you in identifying fake news?</span>
+      <span class="tag">Have you believed fake news to be true?</span>
+      <span class="tag">Did it affect your opinions or decisions?</span>
+      <span class="tag">Do you verify news before sharing?</span>
+      <span class="tag">How do you feel when you realize news is fake?</span>
+      <span class="tag">Does fake news create confusion among people?</span>
+      <span class="tag">How serious is the impact of fake news?</span>
+    </div>
+  </div>
+
+  <div class="interviews-grid">
+    <div class="interview-card">
+      <div class="interview-header">
+        <div class="interview-avatar" style="background:linear-gradient(135deg,#e8ff47,#47c8ff); color:#0a0a0f;">A</div>
+        <div>
+          <div class="interview-name">Anonymous Participant</div>
+          <div class="interview-by">Interviewed by Abhinav</div>
+        </div>
+      </div>
+      <p class="interview-quote">
+        I'm very bad at identifying fake news. Unless I verify through many trusted sources, I can't know whether it's fake or real. I hated the party because of a fake story — but after verifying, I realised how fooled I was.
+      </p>
+      <div class="interview-tags">
+        <span class="tag">Political misinformation</span>
+        <span class="tag">Opinion affected</span>
+        <span class="tag">Low confidence</span>
+      </div>
+    </div>
+    <div class="interview-card">
+      <div class="interview-header">
+        <div class="interview-avatar" style="background:linear-gradient(135deg,#ff6b47,#e8ff47); color:#0a0a0f;">A</div>
+        <div>
+          <div class="interview-name">Ashwin</div>
+          <div class="interview-by">Interviewed by Hasini</div>
+        </div>
+      </div>
+      <p class="interview-quote">
+        AI-generated things make it way harder to identify what's fake and what's real. There's news that could be bizarre but actually be true — so you never really know anymore.
+      </p>
+      <div class="interview-tags">
+        <span class="tag">AI deepfakes</span>
+        <span class="tag">Instagram-heavy</span>
+        <span class="tag">Uncertainty</span>
+      </div>
+    </div>
+    <div class="interview-card">
+      <div class="interview-header">
+        <div class="interview-avatar" style="background:linear-gradient(135deg,#47c8ff,#ff6b47); color:#0a0a0f;">H</div>
+        <div>
+          <div class="interview-name">Harshika</div>
+          <div class="interview-by">Mahindra University Road 6</div>
+        </div>
+      </div>
+      <p class="interview-quote">
+        A deepfake AI video of Prabhas and Anushka "getting married" went viral. My mom believed it completely and started gossiping. I don't share news because I don't trust — trust issues from AI videos.
+      </p>
+      <div class="interview-tags">
+        <span class="tag">Deepfake video</span>
+        <span class="tag">Family impact</span>
+        <span class="tag">Trust breakdown</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HMW -->
+<div class="hmw-section" id="hmw">
+  <div class="hmw-inner">
+    <p class="section-label">Root Cause Analysis</p>
+    <h2 class="section-title">How Might We…?</h2>
+    <p class="section-body">
+      From our research, we generated 24 "How Might We" questions — reframing pain points 
+      as design opportunities. These became the seeds of our ideation process.
+    </p>
+    <div class="hmw-grid">
+      <div class="hmw-card">
+        <div class="hmw-num">01</div>
+        How might we improve post trustworthiness detection?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">02</div>
+        How might we increase awareness of an account's misinformation history?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">03</div>
+        How might we reduce hidden bias in news posts?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">04</div>
+        How might we simplify cross-checking across multiple sources?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">05</div>
+        How might we improve AI-generated video detection?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">06</div>
+        How might we strengthen AI-written text identification?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">07</div>
+        How might we improve manipulated audio detection?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">08</div>
+        How might we encourage acting on doubt before sharing?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">09</div>
+        How might we reduce exposure to emotionally triggering headlines?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">10</div>
+        How might we improve information source tracing?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">11</div>
+        How might we enrich understanding of viral post context?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">12</div>
+        How might we accelerate discovery of already debunked claims?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">13</div>
+        How might we restore full context of out-of-context quotes?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">14</div>
+        How might we increase access to expert consensus?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">15</div>
+        How might we eliminate social pressure to share trending news?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">16</div>
+        How might we improve sharing news with proper context?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">17</div>
+        How might we build a consistent verify-before-sharing habit?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">18</div>
+        How might we simplify retracting a regretted post?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">19</div>
+        How might we transform sharing mistakes into learning moments?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">20</div>
+        How might we build long-term media literacy skills?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">21</div>
+        How might we reduce information overload while staying informed?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">22</div>
+        How might we restore trust in news after being misled?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">23</div>
+        How might we balance healthy skepticism without becoming cynical?
+      </div>
+      <div class="hmw-card">
+        <div class="hmw-num">24</div>
+        How might we simplify fact-checking into a natural daily habit?
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IDEATION -->
+<section id="ideation">
+  <p class="section-label">Ideation Phase</p>
+  <h2 class="section-title">6-3-5 Brainwriting Solutions</h2>
+  <p class="section-body">
+    Using the 6-3-5 brainwriting method, we collaboratively generated six solution ideas 
+    for each of our HMW questions — producing over 140 concrete concepts.
+  </p>
+  <div class="ideation-layout">
+    <div class="ideation-intro">
+      <p>
+        The 6-3-5 method is a structured rapid ideation technique. Each HMW question receives 
+        six practical solution concepts — built collaboratively by the team through structured passes.
+      </p>
+      <p>
+        Click any question below to explore the six ideas our team generated for that challenge.
+      </p>
+      <div class="method-badge">⚡ 6-3-5 Brainwriting</div>
+    </div>
+    <div class="ideas-accordion">
+
+      <div class="idea-group open">
+        <div class="idea-group-header" onclick="toggleGroup(this)">
+          <h4>01. How might we improve post trustworthiness detection?</h4>
+          <span>+</span>
+        </div>
+        <div class="idea-group-body">
+          <div class="idea-list">
+            <div class="idea-item">Introduce AI-based credibility scoring</div>
+            <div class="idea-item">Add source verification badges</div>
+            <div class="idea-item">Compare claims with fact-checking databases</div>
+            <div class="idea-item">Highlight missing evidence in posts</div>
+            <div class="idea-item">Display community trust ratings</div>
+            <div class="idea-item">Use metadata analysis for authenticity checks</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-group">
+        <div class="idea-group-header" onclick="toggleGroup(this)">
+          <h4>02. How might we increase awareness of an account's misinformation history?</h4>
+          <span>+</span>
+        </div>
+        <div class="idea-group-body">
+          <div class="idea-list">
+            <div class="idea-item">Show a misinformation strike history</div>
+            <div class="idea-item">Add transparency dashboards for accounts</div>
+            <div class="idea-item">Display previous fact-check violations</div>
+            <div class="idea-item">Warn users before following unreliable accounts</div>
+            <div class="idea-item">Create reliability timelines</div>
+            <div class="idea-item">Include credibility percentages beside usernames</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-group">
+        <div class="idea-group-header" onclick="toggleGroup(this)">
+          <h4>05. How might we improve AI-generated video detection?</h4>
+          <span>+</span>
+        </div>
+        <div class="idea-group-body">
+          <div class="idea-list">
+            <div class="idea-item">Use deepfake detection algorithms</div>
+            <div class="idea-item">Add digital authenticity watermarks</div>
+            <div class="idea-item">Scan facial movement inconsistencies</div>
+            <div class="idea-item">Analyze unnatural lighting patterns</div>
+            <div class="idea-item">Create public detection databases</div>
+            <div class="idea-item">Alert users when manipulation probability is high</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-group">
+        <div class="idea-group-header" onclick="toggleGroup(this)">
+          <h4>08. How might we encourage acting on doubt before sharing?</h4>
+          <span>+</span>
+        </div>
+        <div class="idea-group-body">
+          <div class="idea-list">
+            <div class="idea-item">Add "Are you sure?" prompts</div>
+            <div class="idea-item">Introduce mandatory pause timers</div>
+            <div class="idea-item">Reward verification behavior</div>
+            <div class="idea-item">Show quick fact-check summaries</div>
+            <div class="idea-item">Encourage users to read before reposting</div>
+            <div class="idea-item">Add educational reminders about misinformation</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-group">
+        <div class="idea-group-header" onclick="toggleGroup(this)">
+          <h4>17. How might we build a consistent verify-before-sharing habit?</h4>
+          <span>+</span>
+        </div>
+        <div class="idea-group-body">
+          <div class="idea-list">
+            <div class="idea-item">Gamify verification behavior</div>
+            <div class="idea-item">Add daily fact-check challenges</div>
+            <div class="idea-item">Reward reliable sharers with badges</div>
+            <div class="idea-item">Provide simple verification checklists</div>
+            <div class="idea-item">Teach quick verification shortcuts</div>
+            <div class="idea-item">Send reminders before reposting suspicious posts</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-group">
+        <div class="idea-group-header" onclick="toggleGroup(this)">
+          <h4>20. How might we build long-term media literacy skills?</h4>
+          <span>+</span>
+        </div>
+        <div class="idea-group-body">
+          <div class="idea-list">
+            <div class="idea-item">Introduce media-literacy courses in schools</div>
+            <div class="idea-item">Create interactive misinformation games</div>
+            <div class="idea-item">Teach source evaluation frameworks</div>
+            <div class="idea-item">Use real-world fake news examples</div>
+            <div class="idea-item">Provide community workshops</div>
+            <div class="idea-item">Develop age-specific learning modules</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-group">
+        <div class="idea-group-header" onclick="toggleGroup(this)">
+          <h4>24. How might we simplify fact-checking into a natural daily habit?</h4>
+          <span>+</span>
+        </div>
+        <div class="idea-group-body">
+          <div class="idea-list">
+            <div class="idea-item">Add instant fact-check browser tools</div>
+            <div class="idea-item">Create daily verification routines</div>
+            <div class="idea-item">Integrate fact-checks into social feeds</div>
+            <div class="idea-item">Use voice assistants for quick checks</div>
+            <div class="idea-item">Reward consistent fact-checking activity</div>
+            <div class="idea-item">Simplify fact-check explanations into short summaries</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">SHIFTERS</div>
+  <div class="footer-text">
+    <strong>Design Thinking · Mahindra University · 2026</strong><br>
+    Abhinav · Ritvik · John · Hasini · Supradeep · Navaneeth · Anvit · Avanika
+  </div>
+</footer>
+
+<script>
+  function toggleGroup(header) {
+    const group = header.parentElement;
+    group.classList.toggle('open');
+  }
+
+  // Highlight active nav on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
